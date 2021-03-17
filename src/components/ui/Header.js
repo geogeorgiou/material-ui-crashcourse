@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import {makeStyles} from "@material-ui/styles";
+import {Tabs, Tab} from "@material-ui/core";
 
 import logo from '../../assets/logo.svg';
 
@@ -31,6 +32,18 @@ const useStyles = makeStyles(theme => ({
 
     logo: {
         height: '7em'
+    },
+
+    tabContainer: {
+        marginLeft: "auto"
+    },
+
+    //abstracting logic of tab into the theme!
+    //fast re-usability expose feature!!!
+    tab: {
+        ...theme.typography.tab,
+        minWidth: 10,
+        marginLeft: "25px"
     }
 
 }))
@@ -49,6 +62,13 @@ export default function Header(props) {
                             alt="company logo"
                             className={classes.logo}
                         />
+                        <Tabs className={classes.tabContainer}>
+                            <Tab className={classes.tab} label="Home"/>
+                            <Tab className={classes.tab} label="Services"/>
+                            <Tab className={classes.tab} label="The Revolution"/>
+                            <Tab className={classes.tab} label="About us"/>
+                            <Tab className={classes.tab} label="Contact us"/>
+                        </Tabs>
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
