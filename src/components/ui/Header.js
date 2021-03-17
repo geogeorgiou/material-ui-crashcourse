@@ -4,6 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import {makeStyles} from "@material-ui/styles";
 import {Tabs, Tab, Button} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 import logo from '../../assets/logo.svg';
 
@@ -81,11 +82,11 @@ export default function Header(props) {
                             onChange={handleChange}
                             indicatorColor="primary"
                         >
-                            <Tab className={classes.tab} label="Home"/>
-                            <Tab className={classes.tab} label="Services"/>
-                            <Tab className={classes.tab} label="The Revolution"/>
-                            <Tab className={classes.tab} label="About us"/>
-                            <Tab className={classes.tab} label="Contact us"/>
+                            <Tab className={classes.tab} component={Link} to={'/'} label="Home"/>
+                            <Tab className={classes.tab} component={Link} to={'/services'} label="Services"/>
+                            <Tab className={classes.tab} component={Link} to={'/revolution'} label="The Revolution"/>
+                            <Tab className={classes.tab} component={Link} to={'/about'} label="About us"/>
+                            <Tab className={classes.tab} component={Link} to={'/contact'} label="Contact us"/>
                         </Tabs>
 
                         <Button
