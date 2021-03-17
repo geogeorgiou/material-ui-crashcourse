@@ -24,7 +24,9 @@ export default function Header(props) {
         <ElevationScroll {...props}>
             <AppBar position="fixed" >
                 <Toolbar>
-                    <Typography variant="h6">Netu Development</Typography>
+                    <Typography variant="h3">
+                        Netu Development
+                    </Typography>
                 </Toolbar>
             </AppBar>
         </ElevationScroll>
