@@ -4,13 +4,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import {makeStyles} from "@material-ui/styles";
 import {
-    Tabs, 
-    Tab, 
-    Button, 
-    Menu, 
+    Tabs,
+    Tab,
+    Button,
+    Menu,
     MenuItem,
     SwipeableDrawer,
-    useMediaQuery, 
+    useMediaQuery,
     useTheme
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -126,7 +126,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     drawerItemSelected: {
-      opacity: 1
+        opacity: 1
     },
 
     drawerItemEstimate: {
@@ -143,14 +143,6 @@ const menuOptions = [
     {name: "Websites", link: "/websites", activeIndex: 1, selectedIndex: 3},
 ]
 
-const routes = [
-    {link: '/', name:'Home Page', activeIndex: 0},
-    {link: '/services', name:'Services', activeIndex: 1},
-    {link: '/revolution', name:'Revolution', activeIndex: 2},
-    {link: '/about', name: 'About us', activeIndex: 3},
-    {link: '/contact', name: 'Contact us', activeIndex: 4},
-    {link: '/estimate', name: 'Free Estimate', activeIndex: 5}
-]
 
 export default function Header(props) {
 
@@ -189,6 +181,21 @@ export default function Header(props) {
         setOpenMenu(false);
     }
 
+    const routes = [
+        {link: '/', name: 'Home Page', activeIndex: 0},
+        {
+            link: '/services',
+            name: 'Services',
+            activeIndex: 1,
+            ariaOwns: anchorEl ? "simple-menu" : undefined,
+            ariaPopup: anchorEl ? "true" : undefined,
+            mouseOver: event => handleClick(event)
+        },
+        {link: '/revolution', name: 'Revolution', activeIndex: 2},
+        {link: '/about', name: 'About us', activeIndex: 3},
+        {link: '/contact', name: 'Contact us', activeIndex: 4}
+    ]
+
     //basically check when user refreshes the page set the correct active tab
     //if not set it via custom way
     useEffect(() => {
@@ -197,7 +204,7 @@ export default function Header(props) {
 
             switch (window.location.pathname) {
                 case `${route.link}`:
-                    if (value !== route.activeIndex){
+                    if (value !== route.activeIndex) {
                         setValue(route.activeIndex);
 
                         //check if selectedIndex is defined before comparing with selectedIndex
@@ -227,7 +234,7 @@ export default function Header(props) {
                 <List disablePadding>
 
                     {
-                        routes.map((tab,i) => {
+                        routes.map((tab, i) => {
                             return (
                                 <ListItem
                                     divider
@@ -235,11 +242,11 @@ export default function Header(props) {
                                     key={`drawer_item_${tab.name}`}
                                     component={Link}
                                     to={tab.link}
-                                    onClick={()=> {
+                                    onClick={() => {
                                         setOpenDrawer(false);
                                         setValue(i)
                                     }}
-                                    className={tab.link==="/estimate" ? classes.drawerItemEstimate : ''}
+                                    className={tab.link === "/estimate" ? classes.drawerItemEstimate : ''}
                                     selected={value === i}
                                 >
                                     <ListItemText
@@ -259,7 +266,7 @@ export default function Header(props) {
             </SwipeableDrawer>
             <IconButton
                 className={classes.drawerIconContainer}
-                onClick={()=>setOpenDrawer(!openDrawer)}
+                onClick={() => setOpenDrawer(!openDrawer)}
                 disableRipple
             >
                 <MenuIcon className={classes.drawerIcon}/>
@@ -275,43 +282,22 @@ export default function Header(props) {
                 onChange={handleChange}
                 indicatorColor="primary"
             >
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to={'/'}
-                    label="Home"
-                />
-
-                <Tab
-                    aria-owns={anchorEl ? "simple-menu" : undefined}
-                    aria-haspopup={anchorEl ? "true" : undefined}
-                    onClick={event => handleClick(event)}
-                    className={classes.tab}
-                    component={Link}
-                    to={'/services'}
-                    label="Services"
-                />
-
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to={'/revolution'}
-                    label="The Revolution"
-                />
-
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to={'/about'}
-                    label="About us"
-                />
-
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to={'/contact'}
-                    label="Contact us"
-                />
+                {
+                    routes.map((route, index) => {
+                        return (
+                            <Tab
+                                key={`route_${index}`}
+                                aria-owns={route.ariaOwns}
+                                aria-haspopup={route.ariaPopup}
+                                onMouseOver={route.mouseOver}
+                                className={classes.tab}
+                                component={Link}
+                                to={route.link}
+                                label={route.name}
+                            />
+                        )
+                    })
+                }
             </Tabs>
 
             <Button
@@ -334,6 +320,7 @@ export default function Header(props) {
                 MenuListProps={{onMouseLeave: handleClose}}
 
                 elevation={0}
+                keepMounted
             >
                 {
                     menuOptions.map((option, i) => {
