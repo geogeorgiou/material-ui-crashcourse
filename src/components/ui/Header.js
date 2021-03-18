@@ -20,6 +20,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Link} from "react-router-dom";
 
+import clsx from "clsx";
 import logo from '../../assets/logo.svg';
 
 function ElevationScroll(props) {
@@ -120,7 +121,12 @@ const useStyles = makeStyles(theme => ({
 
     drawerItem: {
         ...theme.typography.tab,
-        color: "white"
+        color: "white",
+        opacity: 0.7
+    },
+
+    drawerItemSelected: {
+      opacity: 1
     },
 
     drawerItemEstimate: {
@@ -130,12 +136,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const tabConfig = [
-    {pathname: '/', value: 0, name:'Home Page'},
-    {pathname: '/services', value: 1, name:'Services'},
-    {pathname: '/revolution', value: 2, name:'Revolution'},
-    {pathname: '/about', value: 3, name: 'About us'},
-    {pathname: '/contact', value: 4, name: 'Contact us'},
-    {pathname: '/estimate', value: 5, name: 'Free Estimate'}
+    {pathname: '/', name:'Home Page'},
+    {pathname: '/services', name:'Services'},
+    {pathname: '/revolution', name:'Revolution'},
+    {pathname: '/about', name: 'About us'},
+    {pathname: '/contact', name: 'Contact us'},
+    {pathname: '/estimate', name: 'Free Estimate'}
 ]
 
 const menuOptions = [
@@ -190,7 +196,7 @@ export default function Header(props) {
         //check for tab navigation
         for (let i = 0; i < tabConfig.length; i++) {
 
-            if (window.location.pathname === tabConfig[i].pathname && value !== tabConfig[i].value) {
+            if (window.location.pathname === tabConfig[i].pathname && value !== i) {
                 setValue(i);
                 break;
             }
@@ -224,7 +230,7 @@ export default function Header(props) {
                 <List disablePadding>
 
                     {
-                        tabConfig.map(tab => {
+                        tabConfig.map((tab,i) => {
                             return (
                                 <ListItem
                                     divider
@@ -232,12 +238,19 @@ export default function Header(props) {
                                     key={`drawer_item_${tab.name}`}
                                     component={Link}
                                     to={tab.pathname}
-                                    onClick={()=>setOpenDrawer(false)}
+                                    onClick={()=> {
+                                        setOpenDrawer(false);
+                                        setValue(i)
+                                    }}
                                     className={tab.pathname==="/estimate" ? classes.drawerItemEstimate : ''}
+                                    selected={value === i}
                                 >
                                     <ListItemText
                                         disableTypography
-                                        className={classes.drawerItem}
+                                        className={clsx(
+                                            classes.drawerItem,
+                                            value === i ? classes.drawerItemSelected : ''
+                                        )}
                                     >
                                         {tab.name}
                                     </ListItemText>
