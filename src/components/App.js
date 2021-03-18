@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./ui/Header";
+import Footer from "./ui/Footer";
 import {ThemeProvider} from "@material-ui/styles";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
@@ -25,6 +26,7 @@ function App() {
                 </Switch>
             </BrowserRouter>
 
+            <Footer/>
         </ThemeProvider>
     );
 }
