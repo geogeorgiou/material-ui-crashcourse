@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
@@ -32,7 +32,14 @@ const useStyles = makeStyles(theme => ({
     },
 
     logo: {
-        height: '7em'
+        height: '8em'
+    },
+
+    logoContainer: {
+        padding: 0,
+        "&:hover": {
+            "backgroundColor": 'transparent'
+        }
     },
 
     tabContainer: {
@@ -57,6 +64,15 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
+const tabConfig = [
+    {pathname: '/', value: 0},
+    {pathname: '/services', value: 1},
+    {pathname: '/revolution', value: 2},
+    {pathname: '/about', value: 3},
+    {pathname: '/contact', value: 4},
+    {pathname: '/estimate', value: 5},
+]
+
 export default function Header(props) {
 
     const classes = useStyles();
@@ -66,16 +82,42 @@ export default function Header(props) {
         setValue(value);
     }
 
+    //basically check when user refreshes the page set the correct active tab
+    //if not set it via custom way
+    useEffect(() => {
+
+        for (let i = 0; i <= 5; i++) {
+
+            if (window.location.pathname === tabConfig[i].pathname && value !== tabConfig[i].value) {
+                setValue(i);
+                return;
+            }
+
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value])
+
     return (
         <>
             <ElevationScroll {...props}>
                 <AppBar position="fixed" >
                     <Toolbar disableGutters={true}>
-                        <img
-                            src={logo}
-                            alt="company logo"
-                            className={classes.logo}
-                        />
+
+                        <Button
+                            component={Link}
+                            to={"/"}
+                            className={classes.logoContainer}
+                            onClick={()=>setValue(0)}
+                            disableRipple
+                        >
+                            <img
+                                src={logo}
+                                alt="company logo"
+                                className={classes.logo}
+                            />
+                        </Button>
+
                         <Tabs
                             value={value}
                             className={classes.tabContainer}
