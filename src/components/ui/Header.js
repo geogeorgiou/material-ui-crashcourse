@@ -89,6 +89,13 @@ const tabConfig = [
     {pathname: '/estimate', value: 5},
 ]
 
+const menuOptions = [
+    {name: "Services", link: "/services"},
+    {name: "Custom Software Development", link: "/customsoftware"},
+    {name: "Mobile App Development", link: "/mobileapps"},
+    {name: "Websites", link: "/websites"}
+]
+
 export default function Header(props) {
 
     const classes = useStyles();
@@ -96,7 +103,7 @@ export default function Header(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
-    // const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleChange = (e, value) => {
         setValue(value);
@@ -105,6 +112,12 @@ export default function Header(props) {
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
         setOpen(true);
+    }
+
+    const handleMenuItemClick = (e, i) => {
+        setAnchorEl(null);
+        setOpen(false);
+        setSelectedIndex(i);
     }
 
     const handleClose = (e) => {
@@ -116,11 +129,24 @@ export default function Header(props) {
     //if not set it via custom way
     useEffect(() => {
 
-        for (let i = 0; i <= 5; i++) {
+
+        //check for tab navigation
+        for (let i = 0; i < tabConfig.length; i++) {
 
             if (window.location.pathname === tabConfig[i].pathname && value !== tabConfig[i].value) {
                 setValue(i);
-                return;
+                break;
+            }
+
+        }
+
+        //check for menu navigation
+        for (let i = 0; i < menuOptions.length; i++) {
+
+            if (window.location.pathname === menuOptions[i].link) {
+                setValue(1); //set tab
+                setSelectedIndex(i); //set menu selected index
+                break;
             }
 
         }
@@ -131,14 +157,14 @@ export default function Header(props) {
     return (
         <>
             <ElevationScroll {...props}>
-                <AppBar position="fixed" >
+                <AppBar position="fixed">
                     <Toolbar disableGutters={true}>
 
                         <Button
                             component={Link}
                             to={"/"}
                             className={classes.logoContainer}
-                            onClick={()=>setValue(0)}
+                            onClick={() => setValue(0)}
                             disableRipple
                         >
                             <img
@@ -214,41 +240,26 @@ export default function Header(props) {
 
                             elevation={0}
                         >
-                            <MenuItem
-                                onClick={() => {handleClose(); setValue(1)}}
-                                component={Link}
-                                to="/services"
-                                classes={{root: classes.menuItem}}
-                            >
-                                Services
-                            </MenuItem>
+                            {
+                                menuOptions.map((option, i) => {
+                                    return (
+                                        <MenuItem
+                                            key={`menu_opt_${option.name}`}
+                                            onClick={(e) => {
+                                                handleMenuItemClick(e, i);
+                                                setValue(1)
+                                            }}
+                                            component={Link}
+                                            to={option.link}
+                                            classes={{root: classes.menuItem}}
 
-                            <MenuItem
-                                onClick={() => {handleClose(); setValue(1)}}
-                                component={Link}
-                                to="/customsoftware"
-                                classes={{root: classes.menuItem}}
-                            >
-                                Custom Software Development
-                            </MenuItem>
-
-                            <MenuItem
-                                onClick={() => {handleClose(); setValue(1)}}
-                                component={Link}
-                                to="/mobileapps"
-                                classes={{root: classes.menuItem}}
-                            >
-                                Mobile Development
-                            </MenuItem>
-
-                            <MenuItem
-                                onClick={() => {handleClose(); setValue(1)}}
-                                component={Link}
-                                to="/websites"
-                                classes={{root: classes.menuItem}}
-                            >
-                                Website Development
-                            </MenuItem>
+                                            //set selected if is same and current tab is services tab
+                                            selected={i === selectedIndex && value === 1}
+                                        >
+                                            {option.name}
+                                        </MenuItem>
+                                    )
+                                })}
                         </Menu>
                     </Toolbar>
                 </AppBar>
