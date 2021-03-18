@@ -3,7 +3,21 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import {makeStyles} from "@material-ui/styles";
-import {Tabs, Tab, Button, Menu, MenuItem, useMediaQuery, useTheme} from "@material-ui/core";
+import {
+    Tabs, 
+    Tab, 
+    Button, 
+    Menu, 
+    MenuItem,
+    SwipeableDrawer,
+    useMediaQuery, 
+    useTheme
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import {Link} from "react-router-dom";
 
 import logo from '../../assets/logo.svg';
@@ -86,17 +100,42 @@ const useStyles = makeStyles(theme => ({
         "&:hover": {
             opacity: 1
         }
+    },
+
+    drawerIconContainer: {
+        marginLeft: 'auto',
+        '&:hover': {
+            backgroundColor: 'transparent'
+        }
+    },
+
+    drawerIcon: {
+        width: '50px',
+        height: '50px'
+    },
+
+    drawer: {
+        backgroundColor: theme.palette.common.blue
+    },
+
+    drawerItem: {
+        ...theme.typography.tab,
+        color: "white"
+    },
+
+    drawerItemEstimate: {
+        backgroundColor: theme.palette.common.orange
     }
 
 }))
 
 const tabConfig = [
-    {pathname: '/', value: 0},
-    {pathname: '/services', value: 1},
-    {pathname: '/revolution', value: 2},
-    {pathname: '/about', value: 3},
-    {pathname: '/contact', value: 4},
-    {pathname: '/estimate', value: 5},
+    {pathname: '/', value: 0, name:'Home Page'},
+    {pathname: '/services', value: 1, name:'Services'},
+    {pathname: '/revolution', value: 2, name:'Revolution'},
+    {pathname: '/about', value: 3, name: 'About us'},
+    {pathname: '/contact', value: 4, name: 'Contact us'},
+    {pathname: '/estimate', value: 5, name: 'Free Estimate'}
 ]
 
 const menuOptions = [
@@ -113,11 +152,14 @@ export default function Header(props) {
 
     //selects anything that's medium and below
     const matches = useMediaQuery(theme.breakpoints.down('md'));
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
+
+    const [openDrawer, setOpenDrawer] = useState(false);
     const [value, setValue] = useState(0);
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleChange = (e, value) => {
@@ -126,18 +168,18 @@ export default function Header(props) {
 
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
-        setOpen(true);
+        setOpenMenu(true);
     }
 
     const handleMenuItemClick = (e, i) => {
         setAnchorEl(null);
-        setOpen(false);
+        setOpenMenu(false);
         setSelectedIndex(i);
     }
 
     const handleClose = (e) => {
         setAnchorEl(null);
-        setOpen(false);
+        setOpenMenu(false);
     }
 
     //basically check when user refreshes the page set the correct active tab
@@ -168,6 +210,52 @@ export default function Header(props) {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
+
+    const drawer = (
+        <>
+            <SwipeableDrawer
+                disableBackdropTransition={!iOS}
+                disableDiscovery={iOS}
+                open={openDrawer}
+                onClose={() => setOpenDrawer(false)}
+                onOpen={() => setOpenDrawer(true)}
+                classes={{paper: classes.drawer}}
+            >
+                <List disablePadding>
+
+                    {
+                        tabConfig.map(tab => {
+                            return (
+                                <ListItem
+                                    divider
+                                    button
+                                    key={`drawer_item_${tab.name}`}
+                                    component={Link}
+                                    to={tab.pathname}
+                                    onClick={()=>setOpenDrawer(false)}
+                                    className={tab.pathname==="/estimate" ? classes.drawerItemEstimate : ''}
+                                >
+                                    <ListItemText
+                                        disableTypography
+                                        className={classes.drawerItem}
+                                    >
+                                        {tab.name}
+                                    </ListItemText>
+                                </ListItem>
+                            )
+                        })
+                    }
+                </List>
+            </SwipeableDrawer>
+            <IconButton
+                className={classes.drawerIconContainer}
+                onClick={()=>setOpenDrawer(!openDrawer)}
+                disableRipple
+            >
+                <MenuIcon className={classes.drawerIcon}/>
+            </IconButton>
+        </>
+    );
 
     const tabs = (
         <>
@@ -227,7 +315,7 @@ export default function Header(props) {
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
-                open={open}
+                open={openMenu}
                 onClose={handleClose}
 
                 classes={{paper: classes.menu}}
@@ -281,7 +369,7 @@ export default function Header(props) {
                             />
                         </Button>
 
-                        {matches ? null : tabs}
+                        {matches ? drawer : tabs}
 
                     </Toolbar>
                 </AppBar>
