@@ -135,20 +135,21 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-const tabConfig = [
-    {pathname: '/', name:'Home Page'},
-    {pathname: '/services', name:'Services'},
-    {pathname: '/revolution', name:'Revolution'},
-    {pathname: '/about', name: 'About us'},
-    {pathname: '/contact', name: 'Contact us'},
-    {pathname: '/estimate', name: 'Free Estimate'}
-]
 
 const menuOptions = [
-    {name: "Services", link: "/services"},
-    {name: "Custom Software Development", link: "/customsoftware"},
-    {name: "Mobile App Development", link: "/mobileapps"},
-    {name: "Websites", link: "/websites"}
+    {name: "Services", link: "/services", activeIndex: 1, selectedIndex: 0},
+    {name: "Custom Software Development", link: "/customsoftware", activeIndex: 1, selectedIndex: 1},
+    {name: "Mobile App Development", link: "/mobileapps", activeIndex: 1, selectedIndex: 2},
+    {name: "Websites", link: "/websites", activeIndex: 1, selectedIndex: 3},
+]
+
+const routes = [
+    {link: '/', name:'Home Page', activeIndex: 0},
+    {link: '/services', name:'Services', activeIndex: 1},
+    {link: '/revolution', name:'Revolution', activeIndex: 2},
+    {link: '/about', name: 'About us', activeIndex: 3},
+    {link: '/contact', name: 'Contact us', activeIndex: 4},
+    {link: '/estimate', name: 'Free Estimate', activeIndex: 5}
 ]
 
 export default function Header(props) {
@@ -192,27 +193,23 @@ export default function Header(props) {
     //if not set it via custom way
     useEffect(() => {
 
+        [...menuOptions, ...routes].forEach(route => {
 
-        //check for tab navigation
-        for (let i = 0; i < tabConfig.length; i++) {
+            switch (window.location.pathname) {
+                case `${route.link}`:
+                    if (value !== route.activeIndex){
+                        setValue(route.activeIndex);
 
-            if (window.location.pathname === tabConfig[i].pathname && value !== i) {
-                setValue(i);
-                break;
+                        //check if selectedIndex is defined before comparing with selectedIndex
+                        if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
+                            setSelectedIndex(route.selectedIndex);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
-
-        }
-
-        //check for menu navigation
-        for (let i = 0; i < menuOptions.length; i++) {
-
-            if (window.location.pathname === menuOptions[i].link) {
-                setValue(1); //set tab
-                setSelectedIndex(i); //set menu selected index
-                break;
-            }
-
-        }
+        })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
@@ -230,19 +227,19 @@ export default function Header(props) {
                 <List disablePadding>
 
                     {
-                        tabConfig.map((tab,i) => {
+                        routes.map((tab,i) => {
                             return (
                                 <ListItem
                                     divider
                                     button
                                     key={`drawer_item_${tab.name}`}
                                     component={Link}
-                                    to={tab.pathname}
+                                    to={tab.link}
                                     onClick={()=> {
                                         setOpenDrawer(false);
                                         setValue(i)
                                     }}
-                                    className={tab.pathname==="/estimate" ? classes.drawerItemEstimate : ''}
+                                    className={tab.link==="/estimate" ? classes.drawerItemEstimate : ''}
                                     selected={value === i}
                                 >
                                     <ListItemText
@@ -345,14 +342,14 @@ export default function Header(props) {
                                 key={`menu_opt_${option.name}`}
                                 onClick={(e) => {
                                     handleMenuItemClick(e, i);
-                                    setValue(1)
+                                    setValue(option.activeIndex)
                                 }}
                                 component={Link}
                                 to={option.link}
                                 classes={{root: classes.menuItem}}
 
                                 //set selected if is same and current tab is services tab
-                                selected={i === selectedIndex && value === 1}
+                                selected={i === selectedIndex && value === option.activeIndex}
                             >
                                 {option.name}
                             </MenuItem>
