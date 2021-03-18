@@ -6,6 +6,8 @@ import {makeStyles} from "@material-ui/styles";
 import {Tabs, Tab, Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
+import {Menu, MenuItem} from "@material-ui/core"
+
 import logo from '../../assets/logo.svg';
 
 function ElevationScroll(props) {
@@ -60,6 +62,20 @@ const useStyles = makeStyles(theme => ({
         marginLeft: "50px",
         marginRight: "25px",
         height: "45px"
+    },
+
+    menu: {
+        backgroundColor: theme.palette.common.blue,
+        color: 'white',
+        borderRadius: 0
+    },
+
+    menuItem: {
+        ...theme.typography.tab,
+        opacity: 0.7,
+        "&:hover": {
+            opacity: 1
+        }
     }
 
 }))
@@ -78,8 +94,22 @@ export default function Header(props) {
     const classes = useStyles();
     const [value, setValue] = useState(0);
 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [open, setOpen] = useState(false);
+    // const [selectedIndex, setSelectedIndex] = useState(0);
+
     const handleChange = (e, value) => {
         setValue(value);
+    }
+
+    const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
+        setOpen(true);
+    }
+
+    const handleClose = (e) => {
+        setAnchorEl(null);
+        setOpen(false);
     }
 
     //basically check when user refreshes the page set the correct active tab
@@ -124,11 +154,43 @@ export default function Header(props) {
                             onChange={handleChange}
                             indicatorColor="primary"
                         >
-                            <Tab className={classes.tab} component={Link} to={'/'} label="Home"/>
-                            <Tab className={classes.tab} component={Link} to={'/services'} label="Services"/>
-                            <Tab className={classes.tab} component={Link} to={'/revolution'} label="The Revolution"/>
-                            <Tab className={classes.tab} component={Link} to={'/about'} label="About us"/>
-                            <Tab className={classes.tab} component={Link} to={'/contact'} label="Contact us"/>
+                            <Tab
+                                className={classes.tab}
+                                component={Link}
+                                to={'/'}
+                                label="Home"
+                            />
+
+                            <Tab
+                                aria-owns={anchorEl ? "simple-menu" : undefined}
+                                aria-haspopup={anchorEl ? "true" : undefined}
+                                onClick={event => handleClick(event)}
+                                className={classes.tab}
+                                component={Link}
+                                to={'/services'}
+                                label="Services"
+                            />
+
+                            <Tab
+                                className={classes.tab}
+                                component={Link}
+                                to={'/revolution'}
+                                label="The Revolution"
+                            />
+
+                            <Tab
+                                className={classes.tab}
+                                component={Link}
+                                to={'/about'}
+                                label="About us"
+                            />
+
+                            <Tab
+                                className={classes.tab}
+                                component={Link}
+                                to={'/contact'}
+                                label="Contact us"
+                            />
                         </Tabs>
 
                         <Button
@@ -138,6 +200,56 @@ export default function Header(props) {
                         >
                             Free Estimate
                         </Button>
+
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+
+                            classes={{paper: classes.menu}}
+
+                            //important we can set props on nested items
+                            MenuListProps={{onMouseLeave: handleClose}}
+
+                            elevation={0}
+                        >
+                            <MenuItem
+                                onClick={() => {handleClose(); setValue(1)}}
+                                component={Link}
+                                to="/services"
+                                classes={{root: classes.menuItem}}
+                            >
+                                Services
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => {handleClose(); setValue(1)}}
+                                component={Link}
+                                to="/customsoftware"
+                                classes={{root: classes.menuItem}}
+                            >
+                                Custom Software Development
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => {handleClose(); setValue(1)}}
+                                component={Link}
+                                to="/mobileapps"
+                                classes={{root: classes.menuItem}}
+                            >
+                                Mobile Development
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => {handleClose(); setValue(1)}}
+                                component={Link}
+                                to="/websites"
+                                classes={{root: classes.menuItem}}
+                            >
+                                Website Development
+                            </MenuItem>
+                        </Menu>
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
