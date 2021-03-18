@@ -3,10 +3,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import {makeStyles} from "@material-ui/styles";
-import {Tabs, Tab, Button} from "@material-ui/core";
+import {Tabs, Tab, Button, Menu, MenuItem, useMediaQuery, useTheme} from "@material-ui/core";
 import {Link} from "react-router-dom";
-
-import {Menu, MenuItem} from "@material-ui/core"
 
 import logo from '../../assets/logo.svg';
 
@@ -30,11 +28,23 @@ const useStyles = makeStyles(theme => ({
 
     toolbarMargin: {
         ...theme.mixins.toolbar,
-        marginBottom: "3em"
+        marginBottom: "3em",
+        [theme.breakpoints.down('md')]: {
+            marginBottom: '2em'
+        },
+        [theme.breakpoints.down('xs')]: {
+            marginBottom: '1.25em'
+        }
     },
 
     logo: {
-        height: '8em'
+        height: '8em',
+        [theme.breakpoints.down('md')]: {
+            height: '7em'
+        },
+        [theme.breakpoints.down('xs')]: {
+            height: '5.5em'
+        }
     },
 
     logoContainer: {
@@ -98,7 +108,12 @@ const menuOptions = [
 
 export default function Header(props) {
 
+    const theme = useTheme();
     const classes = useStyles();
+
+    //selects anything that's medium and below
+    const matches = useMediaQuery(theme.breakpoints.down('md'));
+
     const [value, setValue] = useState(0);
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -154,6 +169,98 @@ export default function Header(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
 
+    const tabs = (
+        <>
+            <Tabs
+                value={value}
+                className={classes.tabContainer}
+                onChange={handleChange}
+                indicatorColor="primary"
+            >
+                <Tab
+                    className={classes.tab}
+                    component={Link}
+                    to={'/'}
+                    label="Home"
+                />
+
+                <Tab
+                    aria-owns={anchorEl ? "simple-menu" : undefined}
+                    aria-haspopup={anchorEl ? "true" : undefined}
+                    onClick={event => handleClick(event)}
+                    className={classes.tab}
+                    component={Link}
+                    to={'/services'}
+                    label="Services"
+                />
+
+                <Tab
+                    className={classes.tab}
+                    component={Link}
+                    to={'/revolution'}
+                    label="The Revolution"
+                />
+
+                <Tab
+                    className={classes.tab}
+                    component={Link}
+                    to={'/about'}
+                    label="About us"
+                />
+
+                <Tab
+                    className={classes.tab}
+                    component={Link}
+                    to={'/contact'}
+                    label="Contact us"
+                />
+            </Tabs>
+
+            <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+            >
+                Free Estimate
+            </Button>
+
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+
+                classes={{paper: classes.menu}}
+
+                //important we can set props on nested items
+                MenuListProps={{onMouseLeave: handleClose}}
+
+                elevation={0}
+            >
+                {
+                    menuOptions.map((option, i) => {
+                        return (
+                            <MenuItem
+                                key={`menu_opt_${option.name}`}
+                                onClick={(e) => {
+                                    handleMenuItemClick(e, i);
+                                    setValue(1)
+                                }}
+                                component={Link}
+                                to={option.link}
+                                classes={{root: classes.menuItem}}
+
+                                //set selected if is same and current tab is services tab
+                                selected={i === selectedIndex && value === 1}
+                            >
+                                {option.name}
+                            </MenuItem>
+                        )
+                    })}
+            </Menu>
+        </>
+    )
+
     return (
         <>
             <ElevationScroll {...props}>
@@ -174,93 +281,8 @@ export default function Header(props) {
                             />
                         </Button>
 
-                        <Tabs
-                            value={value}
-                            className={classes.tabContainer}
-                            onChange={handleChange}
-                            indicatorColor="primary"
-                        >
-                            <Tab
-                                className={classes.tab}
-                                component={Link}
-                                to={'/'}
-                                label="Home"
-                            />
+                        {matches ? null : tabs}
 
-                            <Tab
-                                aria-owns={anchorEl ? "simple-menu" : undefined}
-                                aria-haspopup={anchorEl ? "true" : undefined}
-                                onClick={event => handleClick(event)}
-                                className={classes.tab}
-                                component={Link}
-                                to={'/services'}
-                                label="Services"
-                            />
-
-                            <Tab
-                                className={classes.tab}
-                                component={Link}
-                                to={'/revolution'}
-                                label="The Revolution"
-                            />
-
-                            <Tab
-                                className={classes.tab}
-                                component={Link}
-                                to={'/about'}
-                                label="About us"
-                            />
-
-                            <Tab
-                                className={classes.tab}
-                                component={Link}
-                                to={'/contact'}
-                                label="Contact us"
-                            />
-                        </Tabs>
-
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                        >
-                            Free Estimate
-                        </Button>
-
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-
-                            classes={{paper: classes.menu}}
-
-                            //important we can set props on nested items
-                            MenuListProps={{onMouseLeave: handleClose}}
-
-                            elevation={0}
-                        >
-                            {
-                                menuOptions.map((option, i) => {
-                                    return (
-                                        <MenuItem
-                                            key={`menu_opt_${option.name}`}
-                                            onClick={(e) => {
-                                                handleMenuItemClick(e, i);
-                                                setValue(1)
-                                            }}
-                                            component={Link}
-                                            to={option.link}
-                                            classes={{root: classes.menuItem}}
-
-                                            //set selected if is same and current tab is services tab
-                                            selected={i === selectedIndex && value === 1}
-                                        >
-                                            {option.name}
-                                        </MenuItem>
-                                    )
-                                })}
-                        </Menu>
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
