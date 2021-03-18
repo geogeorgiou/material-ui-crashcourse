@@ -20,7 +20,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Link} from "react-router-dom";
 
-import clsx from "clsx";
+// import clsx from "clsx";
 import logo from '../../assets/logo.svg';
 
 function ElevationScroll(props) {
@@ -126,11 +126,17 @@ const useStyles = makeStyles(theme => ({
     },
 
     drawerItemSelected: {
-        opacity: 1
+        "& .MuiListItemText-root": {
+            opacity: 1
+        }
     },
 
     drawerItemEstimate: {
         backgroundColor: theme.palette.common.orange
+    },
+
+    appBar: {
+        zIndex: theme.zIndex.modal + 1
     }
 
 }))
@@ -231,6 +237,7 @@ export default function Header(props) {
                 onOpen={() => setOpenDrawer(true)}
                 classes={{paper: classes.drawer}}
             >
+                <div className={classes.toolbarMargin}/>
                 <List disablePadding>
 
                     {
@@ -246,15 +253,12 @@ export default function Header(props) {
                                         setOpenDrawer(false);
                                         setValue(i)
                                     }}
-                                    className={tab.link === "/estimate" ? classes.drawerItemEstimate : ''}
+                                    classes={{selected: classes.drawerItemSelected}}
                                     selected={value === i}
                                 >
                                     <ListItemText
                                         disableTypography
-                                        className={clsx(
-                                            classes.drawerItem,
-                                            value === i ? classes.drawerItemSelected : ''
-                                        )}
+                                        className={classes.drawerItem}
                                     >
                                         {tab.name}
                                     </ListItemText>
@@ -262,6 +266,26 @@ export default function Header(props) {
                             )
                         })
                     }
+
+                    <ListItem
+                        divider
+                        button
+                        component={Link}
+                        to="/estimate"
+                        onClick={() => {
+                            setOpenDrawer(false);
+                            setValue(5)
+                        }}
+                        classes={{root: classes.drawerItemEstimate, selected: classes.drawerItemSelected}}
+                        selected={value === 5}
+                    >
+                        <ListItemText
+                            disableTypography
+                            className={classes.drawerItem}
+                        >
+                            Free Estimate
+                        </ListItemText>
+                    </ListItem>
                 </List>
             </SwipeableDrawer>
             <IconButton
@@ -320,6 +344,7 @@ export default function Header(props) {
                 MenuListProps={{onMouseLeave: handleClose}}
 
                 elevation={0}
+                style={{zIndex: 1302}}
                 keepMounted
             >
                 {
@@ -349,7 +374,7 @@ export default function Header(props) {
     return (
         <>
             <ElevationScroll {...props}>
-                <AppBar position="fixed">
+                <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar disableGutters={true}>
 
                         <Button
