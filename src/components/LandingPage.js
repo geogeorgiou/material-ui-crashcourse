@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonArrow from "../components/ui/ButtonArrow";
 import Typography from "@material-ui/core/Typography";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles(theme => ({
 
@@ -48,7 +49,10 @@ const useStyles = makeStyles(theme => ({
         ...theme.typography.learnButton,
         fontSize: "0.7rem",
         height: 35,
-        padding: 5
+        padding: 5,
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: '2em'
+        },
     },
 
     mainContainer: {
@@ -76,6 +80,20 @@ const useStyles = makeStyles(theme => ({
 
     subtitle: {
         marginBottom: "1em"
+    },
+
+    icon: {
+        marginLeft: "2em",
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0
+        }
+    },
+
+    servicesContainer: {
+        marginTop: '12em',
+        [theme.breakpoints.down('sm')]: {
+            padding: 25
+        }
     }
 
 }));
@@ -93,6 +111,7 @@ export default function LandingPage() {
 
     const classes = useStyles();
     const theme = useTheme();
+    const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Grid container direction="column" className={classes.mainContainer}>
@@ -139,8 +158,16 @@ export default function LandingPage() {
 
             <Grid item> {/*--- Services Block ---*/}
 
-                <Grid container direction="row">
-                    <Grid item>
+                <Grid
+                    container
+                    direction="row"
+                    justify={matchesSM ? "center" : undefined}
+                    className={classes.servicesContainer}
+                >
+                    <Grid item style={{
+                        marginLeft: matchesSM ? 0 : "5em",
+                        textAlign: matchesSM ? "center" : undefined
+                    }}>
                         <Typography variant="h4">
                             Custom Software Development
                         </Typography>
@@ -159,7 +186,7 @@ export default function LandingPage() {
                     </Grid>
 
                     <Grid item>
-                        <img src={customSoftwareIcon} alt="custom software icon"/>
+                        <img className={classes.icon} src={customSoftwareIcon} alt="custom software icon"/>
                     </Grid>
 
                 </Grid>
