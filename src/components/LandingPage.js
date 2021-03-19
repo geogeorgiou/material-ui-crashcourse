@@ -3,6 +3,7 @@ import React from 'react';
 import Lottie from 'react-lottie';
 import {makeStyles, useTheme} from "@material-ui/styles";
 import animationData from '../animations/landinganimation/data';
+import customSoftwareIcon from '../assets/Custom Software Icon.svg';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonArrow from "../components/ui/ButtonArrow";
@@ -38,16 +39,16 @@ const useStyles = makeStyles(theme => ({
     },
 
     learnButtonHero: {
-        borderColor: theme.palette.common.blue,
-        color: theme.palette.common.blue,
-        borderWidth: 2,
-        textTransform: "none",
-        borderRadius: 50,
-        fontFamily: "Roboto",
-        fontWeight: "bold",
+        ...theme.typography.learnButton,
         fontSize: "0.9rem",
         height: 45,
         width: 145
+    },
+    learnButton: {
+        ...theme.typography.learnButton,
+        fontSize: "0.7rem",
+        height: 35,
+        padding: 5
     },
 
     mainContainer: {
@@ -66,6 +67,15 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('xs')]: {
             marginLeft: 0
         }
+    },
+
+    specialText: {
+        fontFamily: "Pacifico",
+        color: theme.palette.common.orange
+    },
+
+    subtitle: {
+        marginBottom: "1em"
     }
 
 }));
@@ -86,11 +96,13 @@ export default function LandingPage() {
 
     return (
         <Grid container direction="column" className={classes.mainContainer}>
-            <Grid item>
+
+            <Grid item> {/*--- hero block ---*/}
                 <Grid container justify="flex-end" alignItems="center" direction="row">
 
-                    {/*IMPORTANT use sm to share the same space until the given breakpoint (sm)*/}
-                    <Grid sm item className={classes.heroTextContainer}>
+                    <Grid sm item
+                          className={classes.heroTextContainer}>  {/*--- use sm share until the given breakpoint (sm) ---*/}
+
                         <Typography variant="h2" align="center">
                             Bringing West Coast Technology
                             <br/> to the Midwest
@@ -114,6 +126,7 @@ export default function LandingPage() {
                                 </Button>
                             </Grid>
                         </Grid>
+
                     </Grid>
 
                     <Grid sm item className={classes.animation}>
@@ -124,7 +137,36 @@ export default function LandingPage() {
 
             </Grid>
 
+            <Grid item> {/*--- Services Block ---*/}
+
+                <Grid container direction="row">
+                    <Grid item>
+                        <Typography variant="h4">
+                            Custom Software Development
+                        </Typography>
+                        <Typography variant="subtitle1" className={classes.subtitle}>
+                            Save energy. Save time. Save money.
+                        </Typography>
+                        <Typography variant="subtitle1">
+                            Complete digital solutions, from investigation to{" "}
+                            <span className={classes.specialText}>celebration.</span>
+                        </Typography>
+
+                        <Button variant="outlined" className={classes.learnButton}>
+                            <span style={{marginRight: 10}}>Learn More</span>
+                            <ButtonArrow width={10} height={10} color={theme.palette.common.blue}/>
+                        </Button>
+                    </Grid>
+
+                    <Grid item>
+                        <img src={customSoftwareIcon} alt="custom software icon"/>
+                    </Grid>
+
+                </Grid>
+
+
+            </Grid>
+
         </Grid>
-        // <Lottie options={defaultOptions} height={"100%"} width={"100%"}/>
     )
 }
