@@ -161,14 +161,12 @@ export default function Header(props) {
 
 
     const [openDrawer, setOpenDrawer] = useState(false);
-    const [value, setValue] = useState(0);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openMenu, setOpenMenu] = useState(false);
-    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleChange = (e, value) => {
-        setValue(value);
+        props.setValue(value);
     }
 
     const handleClick = (e) => {
@@ -179,7 +177,7 @@ export default function Header(props) {
     const handleMenuItemClick = (e, i) => {
         setAnchorEl(null);
         setOpenMenu(false);
-        setSelectedIndex(i);
+        props.setSelectedIndex(i);
     }
 
     const handleClose = (e) => {
@@ -210,12 +208,12 @@ export default function Header(props) {
 
             switch (window.location.pathname) {
                 case `${route.link}`:
-                    if (value !== route.activeIndex) {
-                        setValue(route.activeIndex);
+                    if (props.value !== route.activeIndex) {
+                        props.setValue(route.activeIndex);
 
                         //check if selectedIndex is defined before comparing with selectedIndex
-                        if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
-                            setSelectedIndex(route.selectedIndex);
+                        if (route.selectedIndex && route.selectedIndex !== props.selectedIndex) {
+                            props.setSelectedIndex(route.selectedIndex);
                         }
                     }
                     break;
@@ -225,7 +223,7 @@ export default function Header(props) {
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value])
+    }, [props.value, menuOptions, props.selectedIndex, routes, props])
 
     const drawer = (
         <>
@@ -251,10 +249,10 @@ export default function Header(props) {
                                     to={tab.link}
                                     onClick={() => {
                                         setOpenDrawer(false);
-                                        setValue(i)
+                                        props.setValue(i)
                                     }}
                                     classes={{selected: classes.drawerItemSelected}}
-                                    selected={value === i}
+                                    selected={props.value === i}
                                 >
                                     <ListItemText
                                         disableTypography
@@ -274,10 +272,10 @@ export default function Header(props) {
                         to="/estimate"
                         onClick={() => {
                             setOpenDrawer(false);
-                            setValue(5)
+                            props.setValue(5)
                         }}
                         classes={{root: classes.drawerItemEstimate, selected: classes.drawerItemSelected}}
-                        selected={value === 5}
+                        selected={props.value === 5}
                     >
                         <ListItemText
                             disableTypography
@@ -301,7 +299,7 @@ export default function Header(props) {
     const tabs = (
         <>
             <Tabs
-                value={value}
+                value={props.value}
                 className={classes.tabContainer}
                 onChange={handleChange}
                 indicatorColor="primary"
@@ -354,14 +352,14 @@ export default function Header(props) {
                                 key={`menu_opt_${option.name}`}
                                 onClick={(e) => {
                                     handleMenuItemClick(e, i);
-                                    setValue(option.activeIndex)
+                                    props.setValue(option.activeIndex)
                                 }}
                                 component={Link}
                                 to={option.link}
                                 classes={{root: classes.menuItem}}
 
                                 //set selected if is same and current tab is services tab
-                                selected={i === selectedIndex && value === option.activeIndex}
+                                selected={i === props.selectedIndex && props.value === option.activeIndex}
                             >
                                 {option.name}
                             </MenuItem>
@@ -381,7 +379,7 @@ export default function Header(props) {
                             component={Link}
                             to={"/"}
                             className={classes.logoContainer}
-                            onClick={() => setValue(0)}
+                            onClick={() => props.setValue(0)}
                             disableRipple
                         >
                             <img
