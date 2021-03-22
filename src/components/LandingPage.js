@@ -2,6 +2,7 @@ import React from 'react';
 
 import Lottie from 'react-lottie';
 import {makeStyles, useTheme} from "@material-ui/styles";
+import {Link} from "react-router-dom";
 import animationData from '../animations/landinganimation/data';
 import customSoftwareIcon from '../assets/Custom Software Icon.svg';
 import mobileAppsIcon from "../assets/mobileIcon.svg";
@@ -173,6 +174,8 @@ export default function LandingPage() {
                                 <Button
                                     className={classes.estimateButton}
                                     variant="contained"
+                                    component={Link}
+                                    to={"/estimate"}
                                 >
                                     Free Estimate
                                 </Button>
@@ -181,6 +184,7 @@ export default function LandingPage() {
                                 <Button
                                     className={classes.learnButtonHero}
                                     variant="outlined"
+                                    component={Link}
                                 >
                                     <span style={{marginRight: 10}}>Learn More</span>
                                     <ButtonArrow width={15} height={15} fill={theme.palette.common.blue}/>
@@ -221,7 +225,7 @@ export default function LandingPage() {
                             <span className={classes.specialText}>celebration.</span>
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton}>
+                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/customsoftware">
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -258,7 +262,7 @@ export default function LandingPage() {
                             {matchesSM ? null : <br/>} with either mobile platform.
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton}>
+                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/mobileapps">
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -298,7 +302,7 @@ export default function LandingPage() {
                             Optimized for Search Engines, built for speed.
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton}>
+                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/websites">
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -316,7 +320,7 @@ export default function LandingPage() {
                 {/*-----The Revolution Block-----*/}
                 <Grid
                     container
-                    style={{ height: "100em", marginTop: "12em" }}
+                    style={{height: "100em", marginTop: "12em"}}
                     alignItems="center"
                     justify="center"
                 >
@@ -325,7 +329,7 @@ export default function LandingPage() {
                             <Grid
                                 container
                                 direction="column"
-                                style={{ textAlign: "center" }}
+                                style={{textAlign: "center"}}
                             >
                                 <Grid item>
                                     <Typography variant="h3" gutterBottom>
@@ -338,13 +342,13 @@ export default function LandingPage() {
                                         recipe for revolution.
                                     </Typography>
                                     <Button
-                                        // component={Link}
-                                        // to="/revolution"
+                                        component={Link}
+                                        to="/revolution"
                                         className={classes.learnButtonHero}
                                         variant="outlined"
                                         // onClick={() => props.setValue(2)}
                                     >
-                                        <span style={{ marginRight: 10 }}>Learn More</span>
+                                        <span style={{marginRight: 10}}>Learn More</span>
                                         <ButtonArrow
                                             width={15}
                                             height={15}
@@ -355,7 +359,7 @@ export default function LandingPage() {
                             </Grid>
                         </CardContent>
                     </Card>
-                    <div className={classes.revolutionBackground} />
+                    <div className={classes.revolutionBackground}/>
                 </Grid>
             </Grid>
 
@@ -371,11 +375,12 @@ export default function LandingPage() {
                         item
                         container
                         direction={matchesXS ? "column" : "row"}
-                        style={{position: "absolute", textAlign: matchesXS ? "center" : "inherit" }}
+                        style={{position: "absolute", textAlign: matchesXS ? "center" : "inherit"}}
                         spacing={matchesXS ? 10 : 0}
                     >
                         <Grid item sm style={{
-                            marginLeft: matchesXS ? 0 : matchesSM ? "2em" : "5em"}}
+                            marginLeft: matchesXS ? 0 : matchesSM ? "2em" : "5em"
+                        }}
                         >
                             <Grid container direction="column">
                                 <Typography variant="h2" style={{color: 'white'}}>About us</Typography>
@@ -385,6 +390,8 @@ export default function LandingPage() {
                                     <Button
                                         variant="outlined"
                                         className={classes.learnButton}
+                                        component={Link}
+                                        to="/about"
                                         style={{color: "white", borderColor: "white"}}
                                     >
                                         <span style={{marginRight: 10}}>Learn More</span>
@@ -396,16 +403,20 @@ export default function LandingPage() {
 
                         <Grid item sm style={{
                             marginRight: matchesXS ? 0 : matchesSM ? "2em" : "5em",
-                            textAlign: matchesXS ? "center" : "right"}}
+                            textAlign: matchesXS ? "center" : "right"
+                        }}
                         >
                             <Grid container direction="column">
                                 <Typography variant="h2" style={{color: 'white'}}>Contact us</Typography>
-                                <Typography variant="subtitle2">Say hello! <span  role="img" aria-label="wavingHand">👋</span></Typography>
+                                <Typography variant="subtitle2">Say hello! <span role="img"
+                                                                                 aria-label="wavingHand">👋</span></Typography>
 
                                 <Grid item>
                                     <Button
                                         variant="outlined"
                                         className={classes.learnButton}
+                                        component={Link}
+                                        to="/contact"
                                         style={{color: "white", borderColor: "white"}}
                                     >
                                         <span style={{marginRight: 10}}>Learn More</span>
@@ -417,15 +428,15 @@ export default function LandingPage() {
                     </Grid>
 
 
-                    <div className={classes.infoBackground} />
+                    <div className={classes.infoBackground}/>
                 </Grid>
             </Grid>
-            
+
             <Grid item> {/*--- CTA section ---*/}
                 <CallToAction/>
             </Grid>
-            
+
 
         </Grid>
-    )
+    );
 }

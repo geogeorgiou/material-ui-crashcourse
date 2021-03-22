@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
+import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import ButtonArrow from "./ButtonArrow";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -84,6 +85,8 @@ const CallToAction = () => {
                         <Button
                             className={classes.learnButton}
                             variant="outlined"
+                            component={Link}
+                            to="/revolution"
                         >
                             <span style={{marginRight: 5}}>Learn More</span>
                             <ButtonArrow width={15} height={15} fill={theme.palette.common.blue}/>
@@ -96,7 +99,7 @@ const CallToAction = () => {
 
             <Grid item >
 
-                <Button variant="contained" className={classes.estimateButton}>
+                <Button variant="contained" className={classes.estimateButton} component={Link} to="/estimate">
                     Free Estimate
                 </Button>
 
