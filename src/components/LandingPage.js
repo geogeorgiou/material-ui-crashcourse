@@ -149,7 +149,7 @@ const defaultOptions = {
     }
 }
 
-export default function LandingPage() {
+export default function LandingPage(props) {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -176,6 +176,7 @@ export default function LandingPage() {
                                     variant="contained"
                                     component={Link}
                                     to={"/estimate"}
+                                    onClick={() => props.setValue(5)}
                                 >
                                     Free Estimate
                                 </Button>
@@ -185,6 +186,8 @@ export default function LandingPage() {
                                     className={classes.learnButtonHero}
                                     variant="outlined"
                                     component={Link}
+                                    to={"/revolution"}
+                                    onClick={() => props.setValue(3)}
                                 >
                                     <span style={{marginRight: 10}}>Learn More</span>
                                     <ButtonArrow width={15} height={15} fill={theme.palette.common.blue}/>
@@ -225,7 +228,16 @@ export default function LandingPage() {
                             <span className={classes.specialText}>celebration.</span>
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/customsoftware">
+                        <Button
+                            variant="outlined"
+                            className={classes.learnButton}
+                            component={Link}
+                            to="/customsoftware"
+                            onClick={() => {
+                                props.setValue(1);
+                                props.setSelectedIndex(1);
+                            }}
+                        >
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -262,7 +274,16 @@ export default function LandingPage() {
                             {matchesSM ? null : <br/>} with either mobile platform.
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/mobileapps">
+                        <Button
+                            variant="outlined"
+                            className={classes.learnButton}
+                            component={Link}
+                            to="/mobileapps"
+                            onClick={() => {
+                                props.setValue(1);
+                                props.setSelectedIndex(2);
+                            }}
+                        >
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -302,7 +323,16 @@ export default function LandingPage() {
                             Optimized for Search Engines, built for speed.
                         </Typography>
 
-                        <Button variant="outlined" className={classes.learnButton} component={Link} to="/websites">
+                        <Button
+                            variant="outlined"
+                            className={classes.learnButton}
+                            component={Link}
+                            to="/websites"
+                            onClick={() => {
+                                props.setValue(1);
+                                props.setSelectedIndex(3);
+                            }}
+                        >
                             <span style={{marginRight: 10}}>Learn More</span>
                             <ButtonArrow width={10} height={10} fill={theme.palette.common.blue}/>
                         </Button>
@@ -346,7 +376,7 @@ export default function LandingPage() {
                                         to="/revolution"
                                         className={classes.learnButtonHero}
                                         variant="outlined"
-                                        // onClick={() => props.setValue(2)}
+                                        onClick={() => props.setValue(2)}
                                     >
                                         <span style={{marginRight: 10}}>Learn More</span>
                                         <ButtonArrow
@@ -369,20 +399,28 @@ export default function LandingPage() {
                     container
                     direction="row"
                     alignItems="center"
+                    className={classes.infoBackground}
                     style={{height: "80em"}}
                 >
                     <Grid
                         item
                         container
                         direction={matchesXS ? "column" : "row"}
-                        style={{position: "absolute", textAlign: matchesXS ? "center" : "inherit"}}
-                        spacing={matchesXS ? 10 : 0}
+                        style={{
+                            // position: "absolute",
+                            textAlign: matchesXS ? "center" : "inherit"
+                        }}
+                        // spacing={matchesXS ? 10 : 0}
                     >
                         <Grid item sm style={{
                             marginLeft: matchesXS ? 0 : matchesSM ? "2em" : "5em"
                         }}
                         >
-                            <Grid container direction="column">
+                            <Grid
+                                container
+                                direction="column"
+                                style={{marginBottom: matchesXS ? "10em" : 0}}
+                            >
                                 <Typography variant="h2" style={{color: 'white'}}>About us</Typography>
                                 <Typography variant="subtitle2">Let's get personal</Typography>
 
@@ -393,6 +431,7 @@ export default function LandingPage() {
                                         component={Link}
                                         to="/about"
                                         style={{color: "white", borderColor: "white"}}
+                                        onClick={()=>props.setValue(3)}
                                     >
                                         <span style={{marginRight: 10}}>Learn More</span>
                                         <ButtonArrow width={10} height={10} fill="white"/>
@@ -418,6 +457,7 @@ export default function LandingPage() {
                                         component={Link}
                                         to="/contact"
                                         style={{color: "white", borderColor: "white"}}
+                                        onClick={()=>props.setValue(4)}
                                     >
                                         <span style={{marginRight: 10}}>Learn More</span>
                                         <ButtonArrow width={10} height={10} fill="white"/>
@@ -428,12 +468,12 @@ export default function LandingPage() {
                     </Grid>
 
 
-                    <div className={classes.infoBackground}/>
+                    {/*<div className={classes.infoBackground}/>*/}
                 </Grid>
             </Grid>
 
             <Grid item> {/*--- CTA section ---*/}
-                <CallToAction/>
+                <CallToAction setValue={props.setValue}/>
             </Grid>
 
 

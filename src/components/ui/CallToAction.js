@@ -44,6 +44,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: "1.5rem",
         marginRight: "5em",
         marginLeft: "2em",
+        "&:hover": {
+            backgroundColor: theme.palette.secondary.light
+        },
         [theme.breakpoints.down('sm')]: {
             marginRight: 0,
             marginLeft: 0
@@ -51,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const CallToAction = () => {
+const CallToAction = (props) => {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -87,6 +90,7 @@ const CallToAction = () => {
                             variant="outlined"
                             component={Link}
                             to="/revolution"
+                            onClick={() => props.setValue(5)}
                         >
                             <span style={{marginRight: 5}}>Learn More</span>
                             <ButtonArrow width={15} height={15} fill={theme.palette.common.blue}/>
@@ -99,7 +103,13 @@ const CallToAction = () => {
 
             <Grid item >
 
-                <Button variant="contained" className={classes.estimateButton} component={Link} to="/estimate">
+                <Button
+                    variant="contained"
+                    className={classes.estimateButton}
+                    component={Link}
+                    to="/estimate"
+                    onClick={() => props.setValue(5)}
+                >
                     Free Estimate
                 </Button>
 
