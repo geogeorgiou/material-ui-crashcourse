@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-
+import CallToAction from "./ui/CallToAction";
 
 const useStyles = makeStyles(theme => ({
 
@@ -400,7 +400,7 @@ export default function LandingPage() {
                         >
                             <Grid container direction="column">
                                 <Typography variant="h2" style={{color: 'white'}}>Contact us</Typography>
-                                <Typography variant="subtitle2">Say hello! <span aria-label="waving hand">👋</span></Typography>
+                                <Typography variant="subtitle2">Say hello! <span  role="img" aria-label="wavingHand">👋</span></Typography>
 
                                 <Grid item>
                                     <Button
@@ -420,6 +420,11 @@ export default function LandingPage() {
                     <div className={classes.infoBackground} />
                 </Grid>
             </Grid>
+            
+            <Grid item> {/*--- CTA section ---*/}
+                <CallToAction/>
+            </Grid>
+            
 
         </Grid>
     )
